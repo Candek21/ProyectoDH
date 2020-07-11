@@ -12,6 +12,7 @@ class PeliculasController extends Controller
     // Logica en PHP, para procesar los datos, etc
       $peliculas= pelicula::all(); 
       $arrayPeliculas= $peliculas->toArray();
+    
       $nuevoArray = array_rand($arrayPeliculas, 5);
       $randomsPeliculas = [];
       $ultimasPeliculas= [];
@@ -38,9 +39,31 @@ class PeliculasController extends Controller
     return view("inicio", $ultimasPeliculas, $randomsPeliculas);
 }
     public function titulos (){
-        return view ("titulos");
+        $arraysPeliculas= pelicula::paginate(5);
+        $peliculas= compact("arraysPeliculas");
+      
+        return view ("/titulos", $peliculas);
+    }
+      public function buscar(Request $dataForm) {
+        $titulo  = $dataForm["tituloPelicula"] ;
+        $arraysPeliculas = pelicula::where('title', 'LIKE', "%{$titulo}%")->paginate(5);
+        $vac = compact("arraysPeliculas");
+
+        return view("/titulos", $vac);
     }
      public function listado  (){
+
         return view ("listadoPeliculas");
-}
+    }
+
+    public function detalle($id) {
+        $peliculas = pelicula::all();
+        foreach ($peliculas as $peli) {
+            if ($peli["id"] == $id) {
+                $vacPeliculas = compact("peli");
+                return view("detallePelicula", $vacPeliculas);
+            }
+        }
+    }
+
 }

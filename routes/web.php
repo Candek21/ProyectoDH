@@ -19,4 +19,8 @@ Route::get('/titulo', 'PeliculasController@titulos' );
       
 
 Route::get ("/listadoPeliculas", 'PeliculasController@listado');
-     
+//Buscador de peliculas  
+Route::get("/buscador", 'PeliculasController@buscar');
+
+// Pagina de detalle de cada pelicula
+Route::get('/detallePelicula/{id}', "PeliculasController@detalle");
