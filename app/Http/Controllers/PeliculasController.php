@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Pelicula; 
+use App\Pelicula;
+use App\Genero; 
 
 class PeliculasController extends Controller
 {
@@ -31,8 +32,8 @@ class PeliculasController extends Controller
          $contador= count($peliculas);
          for ($i=$contador-5; $i<$contador; $i++){
               $ultimasPeliculas[]= $arrayPeliculas[$i];
-              
          }
+         $ultimasPeliculas = array_reverse($ultimasPeliculas);
     $ultimasPeliculas = compact("ultimasPeliculas") ;
     $randomsPeliculas = compact('randomsPeliculas');
     // Retornamos la vista
@@ -51,10 +52,7 @@ class PeliculasController extends Controller
 
         return view("/titulos", $vac);
     }
-     public function listado  (){
 
-        return view ("listadoPeliculas");
-    }
 
     public function detalle($id) {
         $peliculas = pelicula::all();
@@ -64,6 +62,43 @@ class PeliculasController extends Controller
                 return view("detallePelicula", $vacPeliculas);
             }
         }
+    }
+    public function agregar(Request $req){
+        $peliculaNueva = new Pelicula();
+        $peliculaNueva->title =$req["title"];
+        $peliculaNueva->rating =$req["rating"];
+        $peliculaNueva->awards =$req["awards"];
+        $peliculaNueva->release_date =$req["release_date"];
+
+        $peliculaNueva-> save();
+
+        return redirect ('/titulo');
+    }
+
+    public function listadoBorrar(){
+        $arraysPeliculas= pelicula::paginate(5);
+        $peliculas= compact("arraysPeliculas");
+      
+        return view ("/borrarPelicula", $peliculas);
+
+    }
+
+    public function borrar(Request $req){
+        //esto va a tener nuestro id
+        $id = $req["id"];
+        $pelicula = Pelicula::find($id);
+
+        $pelicula->delete();
+
+        return redirect("/borrarPelicula");
+    }
+
+    public function buscarBorrar(Request $dataForm){
+        $titulo  = $dataForm["tituloPelicula"] ;
+        $arraysPeliculas = pelicula::where('title', 'LIKE', "%{$titulo}%")->paginate(5);
+        $vac = compact("arraysPeliculas");
+
+        return view("/borrarPelicula", $vac);
     }
 
 }
