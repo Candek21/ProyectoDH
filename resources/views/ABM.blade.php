@@ -1,12 +1,10 @@
-<?php
-
-namespace App;
-
-use Illuminate\Database\Eloquent\Model;
-
-class ABM extends Model
-{
-    <form action="/agregarPelicula" method="get">
+  @extends('plantilla')
+@section('titulo')
+  Alta, baja y modificación de peliculas
+@endsection
+@section ("principal") 
+   
+<form action="/agregarPelicula" method="get">
     <button type="submit" class="btn btn-primary btn-lg btn-block">Agregar Pelicula</button>
 </form>
 <br>
@@ -17,4 +15,4 @@ class ABM extends Model
 <form action="/borrarPelicula" method="get">
     <button type="submit" class="btn btn-primary btn-lg btn-block">Borrar Pelicula</button>
 </form>
-}
+@endsection

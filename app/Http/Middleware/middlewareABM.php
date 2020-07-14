@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Auth;
 
 class middlewareABM
 {
@@ -15,7 +16,10 @@ class middlewareABM
      */
     public function handle($request, Closure $next)
     {
-        echo "Me encuentro en el middleware";
+        $usuarioLog = Auth::user();
+        if($usuarioLog["name"] != "Admin" && $usuarioLog["name"] != "admin"){
+            return redirect('/inicio');
+        }
         return $next($request);
     }
 }

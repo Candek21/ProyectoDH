@@ -11,10 +11,9 @@
 |
 */
 
-Route::get('/home', 'PeliculasController@peliculas');
-      
-
-
+//Pagina principal
+Route::get('/inicio', 'PeliculasController@peliculas');
+//Listado de peliculas      
 Route::get('/titulo', 'PeliculasController@titulos' ); 
       
 //Buscador de peliculas  
@@ -24,19 +23,34 @@ Route::get("/buscador", 'PeliculasController@buscar');
 Route::get('/detallePelicula/{id}', "PeliculasController@detalle");
 Auth::routes();
 
-// Route::get('/home', 'HomeController@index')->name('home');
+// Al loguearse o registrarse nos mande a nuestra página /inicio
+Route::get('/', 'PeliculasController@peliculas');
+Route::get('/home', 'PeliculasController@peliculas');
 
+//Agregar pelicula
 Route::get("/agregarPelicula", function (){
     return view("agregarPelicula");
-});
-Route::post ("agregarPelicula", "PeliculasController@agregar");
+}) -> middleware('admin');
+Route::post ("agregarPelicula", "PeliculasController@agregar") -> middleware('admin');
 
 Route::get("/actualizarPelicula", function(){
-    return view("actualizarPelicula");
+    return view("actualizarPelicula") -> middleware('admin');
 });
+//Borrar pelicula
+Route::post("/borrarPelicula", "peliculasController@borrar")-> middleware('admin');
 
-Route::post("/borrarPelicula", "peliculasController@borrar");
+Route::get('/borrarPelicula', 'PeliculasController@listadoBorrar')-> middleware('admin');
 
-Route::get('/borrarPelicula', 'PeliculasController@listadoBorrar');
+Route::get('/buscadorBorrar', "PeliculasController@buscarBorrar")-> middleware('admin');
+//A
+Route::get('/ABM', function(){
+    return view('ABM');
+}) -> middleware('admin');
+//Actualizar pelicula
+Route::get('/actualizarPelicula', 'PeliculasController@listadoActualizar') -> middleware('admin');
 
-Route::get('/buscadorBorrar', "PeliculasController@buscarBorrar");
+Route::post('/actualizarPelicula', 'PeliculasController@peliculaAActualizar') -> middleware('admin');
+
+Route::get('/buscadorActualizar', "PeliculasController@buscarActualizar") -> middleware('admin');
+
+Route::post('/Actualizar', "PeliculasController@Actualizar") -> middleware('admin');
